@@ -3,15 +3,15 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grade 10 3D Shapes Learning</title>
+  <title>Advanced 3D Geometry - Grade 10</title>
   <script src="/_sdk/element_sdk.js"></script>
   <style>
     body {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #4c1d95 100%);
       width: 100%;
       height: 100%;
       overflow-x: hidden;
@@ -21,67 +21,108 @@
       box-sizing: border-box;
     }
 
-    .app-container {
+    .main-container {
       width: 100%;
       min-height: 100%;
-      padding: 50px 20px;
+      padding: 60px 20px;
     }
 
-    .header {
+    .hero-header {
       text-align: center;
       color: white;
-      margin-bottom: 50px;
+      margin-bottom: 60px;
+      padding: 0 20px;
     }
 
-    .header h1 {
-      font-size: 56px;
-      margin: 0 0 15px 0;
-      font-weight: 700;
-      text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-      letter-spacing: -1px;
+    .hero-header h1 {
+      font-size: 64px;
+      margin: 0 0 20px 0;
+      font-weight: 800;
+      background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      letter-spacing: -2px;
     }
 
-    .header p {
-      font-size: 22px;
+    .hero-header p {
+      font-size: 24px;
       margin: 0;
-      opacity: 0.95;
-      font-weight: 300;
+      opacity: 0.9;
+      font-weight: 400;
+      color: #e2e8f0;
     }
 
-    .content-wrapper {
-      max-width: 1600px;
+    .content-grid {
+      max-width: 1800px;
       margin: 0 auto;
     }
 
-    .shapes-section {
-      margin-bottom: 60px;
+    .tab-navigation {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
     }
 
-    .section-title {
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
       color: white;
-      font-size: 32px;
+      padding: 16px 32px;
+      border-radius: 16px;
+      font-size: 18px;
       font-weight: 600;
-      margin-bottom: 30px;
-      text-align: center;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-color: #667eea;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .shapes-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 35px;
       margin-bottom: 40px;
     }
 
     .shape-card {
-      background: white;
-      border-radius: 24px;
-      padding: 35px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 28px;
+      padding: 40px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
       position: relative;
       overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .shape-card::before {
@@ -90,15 +131,15 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 6px;
-      background: linear-gradient(90deg, #667eea, #764ba2);
+      height: 8px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
       opacity: 0;
       transition: opacity 0.3s ease;
     }
 
     .shape-card:hover {
-      transform: translateY(-12px) scale(1.02);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+      transform: translateY(-15px) scale(1.03);
+      box-shadow: 0 30px 70px rgba(102, 126, 234, 0.4);
     }
 
     .shape-card:hover::before {
@@ -107,242 +148,482 @@
 
     .shape-visual {
       width: 100%;
-      height: 200px;
+      height: 220px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 25px;
       position: relative;
+      background: radial-gradient(circle, rgba(102, 126, 234, 0.05), transparent);
     }
 
     .shape-name {
-      font-size: 28px;
-      font-weight: 700;
+      font-size: 32px;
+      font-weight: 800;
       color: #1e293b;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      letter-spacing: -0.5px;
     }
 
-    .shape-info {
-      background: #f8fafc;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 15px;
-    }
-
-    .shape-info h4 {
-      font-size: 16px;
-      color: #64748b;
-      margin: 0 0 12px 0;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .info-grid {
+    .properties-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      font-size: 15px;
-      color: #334155;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
     }
 
-    .info-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
+    .property-box {
+      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      padding: 15px;
+      border-radius: 14px;
+      text-align: center;
+      border: 2px solid #e2e8f0;
+      transition: all 0.3s ease;
     }
 
-    .info-label {
-      font-weight: 600;
-      color: #475569;
+    .property-box:hover {
+      border-color: #667eea;
+      transform: scale(1.05);
     }
 
-    .info-value {
-      color: #1e40af;
-      font-weight: 500;
-    }
-
-    .formula-section {
-      margin-top: 15px;
-    }
-
-    .formula {
-      background: white;
-      border-left: 4px solid #667eea;
-      padding: 12px 15px;
-      margin: 8px 0;
-      border-radius: 6px;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      color: #334155;
-    }
-
-    .formula strong {
-      color: #667eea;
+    .property-label {
+      font-size: 12px;
+      color: #64748b;
       font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
     }
 
-    .quiz-container {
+    .property-value {
+      font-size: 28px;
+      color: #667eea;
+      font-weight: 800;
+    }
+
+    .formulas-section {
+      background: linear-gradient(135deg, #f1f5f9, #e0e7ff);
+      border-radius: 16px;
+      padding: 25px;
+      margin-top: 20px;
+      border: 2px solid #c7d2fe;
+    }
+
+    .formula-title {
+      font-size: 16px;
+      color: #4338ca;
+      font-weight: 800;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .formula-item {
       background: white;
-      border-radius: 24px;
-      padding: 50px 40px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      border-left: 5px solid #667eea;
+      padding: 15px 20px;
+      margin: 12px 0;
+      border-radius: 10px;
+      font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+      font-size: 16px;
+      color: #1e293b;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .formula-item:hover {
+      transform: translateX(8px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    }
+
+    .formula-label {
+      color: #667eea;
+      font-weight: 800;
+      margin-right: 10px;
+    }
+
+    .key-fact {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border-left: 5px solid #f59e0b;
+      padding: 15px 20px;
+      margin: 15px 0;
+      border-radius: 10px;
+      font-size: 15px;
+      color: #92400e;
+      font-weight: 600;
+    }
+
+    .calculator-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 28px;
+      padding: 50px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
       max-width: 900px;
       margin: 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
-    .quiz-header {
+    .calculator-header {
       text-align: center;
       margin-bottom: 40px;
     }
 
-    .quiz-header h2 {
-      font-size: 38px;
+    .calculator-header h2 {
+      font-size: 42px;
       color: #1e293b;
       margin: 0 0 15px 0;
+      font-weight: 800;
+    }
+
+    .calculator-form {
+      display: grid;
+      gap: 25px;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    .form-label {
+      font-size: 16px;
       font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    .quiz-progress {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-
-    .progress-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #e2e8f0;
+    .form-select, .form-input {
+      padding: 18px 20px;
+      border: 3px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+      background: white;
       transition: all 0.3s ease;
     }
 
-    .progress-dot.completed {
-      background: #10b981;
+    .form-select:focus, .form-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
     }
 
-    .progress-dot.current {
-      background: #667eea;
-      transform: scale(1.4);
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
     }
 
-    .score-badge {
-      display: inline-block;
+    .calc-button {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
-      padding: 12px 30px;
-      border-radius: 30px;
+      border: none;
+      border-radius: 16px;
+      padding: 22px 40px;
       font-size: 20px;
-      font-weight: 700;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    .question-container {
-      margin-bottom: 35px;
+    .calc-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
     }
 
-    .question-number {
-      color: #667eea;
-      font-size: 18px;
+    .calc-result {
+      margin-top: 30px;
+      padding: 30px;
+      background: linear-gradient(135deg, #e0f2fe, #ddd6fe);
+      border-radius: 16px;
+      border: 3px solid #667eea;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
       font-weight: 700;
+      color: #1e293b;
+    }
+
+    .quiz-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 28px;
+      padding: 50px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      max-width: 1000px;
+      margin: 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .quiz-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .quiz-header h2 {
+      font-size: 48px;
+      color: #1e293b;
+      margin: 0 0 20px 0;
+      font-weight: 800;
+    }
+
+    .quiz-start-screen {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .quiz-start-screen h3 {
+      font-size: 32px;
+      color: #475569;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+
+    .quiz-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin: 40px 0;
+    }
+
+    .feature-box {
+      background: linear-gradient(135deg, #f8fafc, #e0e7ff);
+      padding: 30px;
+      border-radius: 16px;
+      border: 2px solid #c7d2fe;
+    }
+
+    .feature-icon {
+      font-size: 48px;
       margin-bottom: 15px;
     }
 
-    .question-text {
-      font-size: 24px;
-      color: #1e293b;
-      line-height: 1.6;
-      margin-bottom: 30px;
-      font-weight: 500;
+    .feature-text {
+      font-size: 16px;
+      color: #475569;
+      font-weight: 600;
     }
 
-    .options-container {
-      display: grid;
-      gap: 15px;
-      margin-bottom: 30px;
-    }
-
-    .option-btn {
-      background: #f8fafc;
-      border: 3px solid #e2e8f0;
+    .start-quiz-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
       border-radius: 16px;
-      padding: 20px 25px;
-      font-size: 18px;
-      color: #334155;
+      padding: 24px 60px;
+      font-size: 24px;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.3s ease;
-      text-align: left;
-      font-weight: 500;
-      position: relative;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .start-quiz-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 35px rgba(16, 185, 129, 0.5);
+    }
+
+    .quiz-progress-bar {
+      background: #e2e8f0;
+      height: 12px;
+      border-radius: 20px;
+      margin-bottom: 30px;
       overflow: hidden;
     }
 
-    .option-btn::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 6px;
-      background: #667eea;
-      transform: scaleY(0);
-      transition: transform 0.3s ease;
+    .quiz-progress-fill {
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      height: 100%;
+      transition: width 0.5s ease;
+      border-radius: 20px;
     }
 
-    .option-btn:hover:not(.correct):not(.incorrect) {
-      background: #f1f5f9;
-      border-color: #667eea;
-      transform: translateX(8px);
+    .quiz-info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
     }
 
-    .option-btn:hover::before {
-      transform: scaleY(1);
+    .question-counter {
+      font-size: 20px;
+      font-weight: 700;
+      color: #667eea;
+      background: #e0e7ff;
+      padding: 12px 25px;
+      border-radius: 25px;
     }
 
-    .option-btn.correct {
+    .score-display {
+      font-size: 20px;
+      font-weight: 700;
+      color: #10b981;
       background: #d1fae5;
+      padding: 12px 25px;
+      border-radius: 25px;
+    }
+
+    .difficulty-badge {
+      font-size: 16px;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .difficulty-easy {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .difficulty-medium {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .difficulty-hard {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .question-card {
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      padding: 40px;
+      border-radius: 20px;
+      margin-bottom: 35px;
+      border: 3px solid #e2e8f0;
+    }
+
+    .question-text {
+      font-size: 26px;
+      color: #1e293b;
+      line-height: 1.7;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .question-context {
+      font-size: 16px;
+      color: #64748b;
+      margin-top: 15px;
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 18px;
+      margin-bottom: 35px;
+    }
+
+    .option-card {
+      background: white;
+      border: 4px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 25px 30px;
+      font-size: 20px;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .option-letter {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .option-card:hover:not(.correct):not(.incorrect):not(.disabled) {
+      background: #f8fafc;
+      border-color: #667eea;
+      transform: translateX(10px);
+    }
+
+    .option-card.correct {
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
       border-color: #10b981;
       color: #065f46;
-      font-weight: 700;
     }
 
-    .option-btn.correct::after {
-      content: '✓';
-      position: absolute;
-      right: 25px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 28px;
-      color: #10b981;
+    .option-card.correct .option-letter {
+      background: linear-gradient(135deg, #10b981, #059669);
     }
 
-    .option-btn.incorrect {
-      background: #fee2e2;
+    .option-card.incorrect {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
       border-color: #ef4444;
       color: #991b1b;
-      font-weight: 700;
     }
 
-    .option-btn.incorrect::after {
-      content: '✗';
-      position: absolute;
-      right: 25px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 28px;
-      color: #ef4444;
+    .option-card.incorrect .option-letter {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
     }
 
-    .option-btn:disabled {
+    .option-card.disabled {
       cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .feedback-box {
+      padding: 30px;
+      border-radius: 16px;
+      margin-bottom: 30px;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.6;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+    }
+
+    .feedback-box.correct {
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+      border: 3px solid #10b981;
+      color: #065f46;
+    }
+
+    .feedback-box.incorrect {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      border: 3px solid #ef4444;
+      color: #991b1b;
+    }
+
+    .feedback-box.empty {
+      background: transparent;
+      border: none;
     }
 
     .quiz-actions {
       display: flex;
-      gap: 15px;
+      gap: 20px;
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     .quiz-btn {
@@ -350,130 +631,122 @@
       color: white;
       border: none;
       border-radius: 16px;
-      padding: 18px 45px;
-      font-size: 18px;
-      font-weight: 700;
+      padding: 20px 50px;
+      font-size: 20px;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    .quiz-btn:hover {
+    .quiz-btn:hover:not(:disabled) {
       transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
     }
 
     .quiz-btn:disabled {
-      background: #cbd5e1;
+      background: linear-gradient(135deg, #94a3b8, #64748b);
       cursor: not-allowed;
       box-shadow: none;
     }
 
     .quiz-btn.secondary {
-      background: #64748b;
+      background: linear-gradient(135deg, #64748b, #475569);
     }
 
-    .quiz-btn.secondary:hover {
-      background: #475569;
-    }
-
-    .feedback-container {
-      margin-top: 25px;
-      padding: 20px;
-      border-radius: 12px;
+    .results-screen {
       text-align: center;
-      font-size: 18px;
-      font-weight: 600;
-      min-height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 50px 20px;
     }
 
-    .feedback-container.correct {
-      background: #d1fae5;
-      color: #065f46;
+    .results-emoji {
+      font-size: 120px;
+      margin-bottom: 30px;
+      animation: bounce 1s ease infinite alternate;
     }
 
-    .feedback-container.incorrect {
-      background: #fee2e2;
-      color: #991b1b;
+    @keyframes bounce {
+      from { transform: translateY(0px); }
+      to { transform: translateY(-20px); }
     }
 
-    .feedback-container.empty {
-      background: transparent;
-    }
-
-    .final-results {
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .final-score {
-      font-size: 72px;
-      font-weight: 700;
-      color: #667eea;
+    .results-score {
+      font-size: 96px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       margin: 20px 0;
+      letter-spacing: -3px;
     }
 
-    .performance-message {
-      font-size: 28px;
+    .results-message {
+      font-size: 36px;
       color: #334155;
-      margin: 20px 0;
-      font-weight: 600;
+      margin: 25px 0;
+      font-weight: 700;
     }
 
-    .results-breakdown {
+    .results-stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 20px;
-      margin: 30px 0;
-      max-width: 500px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 25px;
+      margin: 50px 0;
+      max-width: 800px;
       margin-left: auto;
       margin-right: auto;
     }
 
-    .result-stat {
-      background: #f8fafc;
-      padding: 20px;
-      border-radius: 12px;
-      border: 2px solid #e2e8f0;
+    .stat-box {
+      background: linear-gradient(135deg, #f8fafc, #e0e7ff);
+      padding: 30px;
+      border-radius: 20px;
+      border: 3px solid #c7d2fe;
     }
 
-    .result-stat-value {
-      font-size: 36px;
-      font-weight: 700;
+    .stat-value {
+      font-size: 52px;
+      font-weight: 900;
       color: #667eea;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
     }
 
-    .result-stat-label {
-      font-size: 14px;
+    .stat-label {
+      font-size: 16px;
       color: #64748b;
-      font-weight: 600;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     @keyframes rotate3d {
-      from { transform: rotateY(0deg) rotateX(10deg); }
-      to { transform: rotateY(360deg) rotateX(10deg); }
+      from { transform: rotateY(0deg) rotateX(15deg); }
+      to { transform: rotateY(360deg) rotateX(15deg); }
     }
 
     .rotating {
-      animation: rotate3d 8s linear infinite;
+      animation: rotate3d 10s linear infinite;
       transform-style: preserve-3d;
     }
 
     @media (max-width: 768px) {
-      .header h1 {
-        font-size: 36px;
+      .hero-header h1 {
+        font-size: 42px;
       }
       
       .shapes-grid {
         grid-template-columns: 1fr;
       }
       
-      .quiz-container {
+      .quiz-container, .calculator-container {
         padding: 30px 20px;
+      }
+
+      .properties-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -482,57 +755,125 @@
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
  </head>
  <body>
-  <main class="app-container">
-   <header class="header">
-    <h1 id="app-title">Grade 10: 3D Shapes Mastery</h1>
-    <p id="subtitle">Master volume, surface area, and properties of three-dimensional shapes</p>
+  <main class="main-container">
+   <header class="hero-header">
+    <h1 id="app-title">Advanced 3D Geometry</h1>
+    <p id="subtitle">Master Grade 10 concepts: Volume, Surface Area, and Spatial Reasoning</p>
    </header>
-   <div class="content-wrapper">
-    <section class="shapes-section">
-     <h2 class="section-title">📐 Study Guide: 3D Shapes</h2>
+   <nav class="tab-navigation"><button class="tab-btn active" onclick="switchTab('shapes')">📚 Study Guide</button> <button class="tab-btn" onclick="switchTab('calculator')">🧮 Calculator</button> <button class="tab-btn" onclick="switchTab('quiz')">🎯 Assessment Quiz</button>
+   </nav>
+   <div class="content-grid"><!-- Shapes Study Guide Tab -->
+    <div id="shapes-tab" class="tab-content active">
      <div class="shapes-grid" id="shapes-grid"></div>
-    </section>
-    <section class="quiz-container" id="quiz-container">
-     <div class="quiz-header">
-      <h2 id="quiz-title">Knowledge Assessment Quiz</h2>
-      <div class="quiz-progress" id="quiz-progress"></div>
-      <div class="score-badge" id="score-badge">
-       Score: 0/10
+    </div><!-- Calculator Tab -->
+    <div id="calculator-tab" class="tab-content">
+     <div class="calculator-container">
+      <div class="calculator-header">
+       <h2 id="calculator-title">3D Shape Calculator</h2>
+       <p style="color: #64748b; font-size: 18px; font-weight: 500;">Calculate volume and surface area instantly</p>
+      </div>
+      <div class="calculator-form">
+       <div class="form-group"><label class="form-label">Select Shape</label> <select id="calc-shape" class="form-select"> <option value="">Choose a shape...</option> <option value="cube">Cube</option> <option value="sphere">Sphere</option> <option value="cylinder">Cylinder</option> <option value="cone">Cone</option> <option value="pyramid">Square Pyramid</option> <option value="prism">Triangular Prism</option> <option value="hemisphere">Hemisphere</option> <option value="rectangular">Rectangular Prism</option> </select>
+       </div>
+       <div id="calc-inputs" class="inputs-grid"></div><button class="calc-button" id="calculate-btn">Calculate</button>
+       <div class="calc-result" id="calc-result">
+        Select a shape and enter dimensions to calculate
+       </div>
       </div>
      </div>
-     <div id="quiz-content">
-      <div class="question-container">
-       <div class="question-number" id="question-number"></div>
-       <div class="question-text" id="question-text"></div>
+    </div><!-- Quiz Tab -->
+    <div id="quiz-tab" class="tab-content">
+     <div class="quiz-container">
+      <div class="quiz-header">
+       <h2 id="quiz-title">Advanced Assessment Quiz</h2>
       </div>
-      <div class="options-container" id="options-container"></div>
-      <div class="quiz-actions"><button class="quiz-btn" id="next-btn">Next Question</button> <button class="quiz-btn secondary" id="restart-btn" style="display: none;">Restart Quiz</button>
+      <div id="quiz-start" class="quiz-start-screen">
+       <h3>Test Your 3D Geometry Mastery</h3>
+       <div class="quiz-features">
+        <div class="feature-box">
+         <div class="feature-icon">
+          📝
+         </div>
+         <div class="feature-text">
+          15 Challenging Questions
+         </div>
+        </div>
+        <div class="feature-box">
+         <div class="feature-icon">
+          🎓
+         </div>
+         <div class="feature-text">
+          Grade 10 Level Content
+         </div>
+        </div>
+        <div class="feature-box">
+         <div class="feature-icon">
+          ⚡
+         </div>
+         <div class="feature-text">
+          Mixed Difficulty Levels
+         </div>
+        </div>
+        <div class="feature-box">
+         <div class="feature-icon">
+          💡
+         </div>
+         <div class="feature-text">
+          Detailed Explanations
+         </div>
+        </div>
+       </div><button class="start-quiz-btn" id="start-quiz-btn">Start Assessment</button>
       </div>
-      <div class="feedback-container empty" id="feedback"></div>
+      <div id="quiz-content" style="display: none;">
+       <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="progress-fill"></div>
+       </div>
+       <div class="quiz-info-bar">
+        <div class="question-counter" id="question-counter"></div>
+        <div id="difficulty-badge" class="difficulty-badge"></div>
+        <div class="score-display" id="score-display">
+         Score: 0/15
+        </div>
+       </div>
+       <div class="question-card">
+        <div class="question-text" id="question-text"></div>
+        <div class="question-context" id="question-context"></div>
+       </div>
+       <div class="options-grid" id="options-grid"></div>
+       <div class="feedback-box empty" id="feedback-box"></div>
+       <div class="quiz-actions"><button class="quiz-btn" id="submit-btn">Submit Answer</button> <button class="quiz-btn" id="next-btn" style="display: none;">Next Question</button>
+       </div>
+      </div>
+      <div id="quiz-results" style="display: none;"></div>
      </div>
-     <div id="final-results" style="display: none;"></div>
-    </section>
+    </div>
    </div>
   </main>
   <script>
     const defaultConfig = {
-      app_title: "Grade 10: 3D Shapes Mastery",
-      subtitle: "Master volume, surface area, and properties of three-dimensional shapes",
+      app_title: "Advanced 3D Geometry",
+      subtitle: "Master Grade 10 concepts: Volume, Surface Area, and Spatial Reasoning",
       cube_label: "Cube",
       sphere_label: "Sphere",
       cylinder_label: "Cylinder",
       cone_label: "Cone",
       pyramid_label: "Square Pyramid",
       prism_label: "Triangular Prism",
-      quiz_title: "Knowledge Assessment Quiz",
-      quiz_button: "Next Question",
+      hemisphere_label: "Hemisphere",
+      rectangular_prism_label: "Rectangular Prism",
+      quiz_title: "Advanced Assessment Quiz",
+      start_quiz_button: "Start Assessment",
+      next_button: "Next Question",
+      submit_button: "Submit Answer",
       restart_button: "Restart Quiz",
-      background_color: "#1e3c72",
+      calculator_title: "3D Shape Calculator",
+      calculate_button: "Calculate",
+      background_color: "#0f172a",
       surface_color: "#ffffff",
       text_color: "#1e293b",
       accent_color: "#667eea",
       button_color: "#10b981",
-      font_family: "Inter",
+      font_family: "SF Pro Display",
       font_size: 16
     };
 
@@ -545,7 +886,11 @@
         edges: 12,
         volumeFormula: 'V = s³',
         surfaceAreaFormula: 'SA = 6s²',
-        svg: '<svg viewBox="0 0 200 200" width="160" height="160"><g class="rotating"><rect x="40" y="80" width="60" height="60" fill="#60a5fa" stroke="#1e40af" stroke-width="3"/><path d="M100,80 L130,50 L130,110 L100,140 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3"/><path d="M40,80 L70,50 L130,50 L100,80 Z" fill="#93c5fd" stroke="#1e40af" stroke-width="3"/></g></svg>'
+        keyFact: 'All faces are congruent squares. Each vertex connects 3 edges.',
+        svg: '<svg viewBox="0 0 200 200" width="170" height="170"><g class="rotating"><rect x="35" y="75" width="65" height="65" fill="#60a5fa" stroke="#1e40af" stroke-width="4"/><path d="M100,75 L135,40 L135,105 L100,140 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="4"/><path d="M35,75 L70,40 L135,40 L100,75 Z" fill="#93c5fd" stroke="#1e40af" stroke-width="4"/></g></svg>',
+        calcInputs: [{name: 'side', label: 'Side Length (s)', unit: 'units'}],
+        calcVolume: (vals) => Math.pow(vals.side, 3),
+        calcSA: (vals) => 6 * Math.pow(vals.side, 2)
       },
       {
         id: 'sphere',
@@ -555,7 +900,11 @@
         edges: 0,
         volumeFormula: 'V = (4/3)πr³',
         surfaceAreaFormula: 'SA = 4πr²',
-        svg: '<svg viewBox="0 0 200 200" width="160" height="160"><defs><radialGradient id="sphereGrad"><stop offset="30%" stop-color="#fb923c"/><stop offset="100%" stop-color="#ea580c"/></radialGradient></defs><g class="rotating"><circle cx="100" cy="100" r="65" fill="url(#sphereGrad)" stroke="#9a3412" stroke-width="3"/><ellipse cx="100" cy="100" rx="65" ry="20" fill="none" stroke="#9a3412" stroke-width="2" opacity="0.5"/><ellipse cx="100" cy="100" rx="20" ry="65" fill="none" stroke="#9a3412" stroke-width="2" opacity="0.5"/></g></svg>'
+        keyFact: 'Every point on surface is equidistant from center. Perfect 3D symmetry.',
+        svg: '<svg viewBox="0 0 200 200" width="170" height="170"><defs><radialGradient id="sg"><stop offset="25%" stop-color="#fb923c"/><stop offset="100%" stop-color="#ea580c"/></radialGradient></defs><g class="rotating"><circle cx="100" cy="100" r="70" fill="url(#sg)" stroke="#9a3412" stroke-width="4"/><ellipse cx="100" cy="100" rx="70" ry="22" fill="none" stroke="#9a3412" stroke-width="2.5" opacity="0.6"/><ellipse cx="100" cy="100" rx="22" ry="70" fill="none" stroke="#9a3412" stroke-width="2.5" opacity="0.6"/></g></svg>',
+        calcInputs: [{name: 'radius', label: 'Radius (r)', unit: 'units'}],
+        calcVolume: (vals) => (4/3) * Math.PI * Math.pow(vals.radius, 3),
+        calcSA: (vals) => 4 * Math.PI * Math.pow(vals.radius, 2)
       },
       {
         id: 'cylinder',
@@ -565,7 +914,14 @@
         edges: 2,
         volumeFormula: 'V = πr²h',
         surfaceAreaFormula: 'SA = 2πr² + 2πrh',
-        svg: '<svg viewBox="0 0 200 200" width="160" height="160"><defs><linearGradient id="cylGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#059669"/></linearGradient></defs><g class="rotating"><ellipse cx="100" cy="55" rx="55" ry="18" fill="#6ee7b7" stroke="#047857" stroke-width="3"/><rect x="45" y="55" width="110" height="90" fill="url(#cylGrad)" stroke="none"/><line x1="45" y1="55" x2="45" y2="145" stroke="#047857" stroke-width="3"/><line x1="155" y1="55" x2="155" y2="145" stroke="#047857" stroke-width="3"/><ellipse cx="100" cy="145" rx="55" ry="18" fill="#34d399" stroke="#047857" stroke-width="3"/></g></svg>'
+        keyFact: 'Two parallel circular bases. Lateral surface unrolls into a rectangle.',
+        svg: '<svg viewBox="0 0 200 200" width="170" height="170"><defs><linearGradient id="cg" x1="0%" x2="100%"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#059669"/></linearGradient></defs><g class="rotating"><ellipse cx="100" cy="50" rx="60" ry="20" fill="#6ee7b7" stroke="#047857" stroke-width="4"/><rect x="40" y="50" width="120" height="95" fill="url(#cg)"/><line x1="40" y1="50" x2="40" y2="145" stroke="#047857" stroke-width="4"/><line x1="160" y1="50" x2="160" y2="145" stroke="#047857" stroke-width="4"/><ellipse cx="100" cy="145" rx="60" ry="20" fill="#34d399" stroke="#047857" stroke-width="4"/></g></svg>',
+        calcInputs: [
+          {name: 'radius', label: 'Radius (r)', unit: 'units'},
+          {name: 'height', label: 'Height (h)', unit: 'units'}
+        ],
+        calcVolume: (vals) => Math.PI * Math.pow(vals.radius, 2) * vals.height,
+        calcSA: (vals) => 2 * Math.PI * Math.pow(vals.radius, 2) + 2 * Math.PI * vals.radius * vals.height
       },
       {
         id: 'cone',
@@ -575,7 +931,15 @@
         edges: 1,
         volumeFormula: 'V = (1/3)πr²h',
         surfaceAreaFormula: 'SA = πr² + πrl',
-        svg: '<svg viewBox="0 0 200 200" width="160" height="160"><defs><linearGradient id="coneGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs><g class="rotating"><ellipse cx="100" cy="155" rx="65" ry="20" fill="#fcd34d" stroke="#b45309" stroke-width="3"/><path d="M35,155 L100,35 L165,155" fill="url(#coneGrad)" stroke="#b45309" stroke-width="3"/></g></svg>'
+        keyFact: 'Volume is exactly 1/3 of cylinder with same base and height.',
+        svg: '<svg viewBox="0 0 200 200" width="170" height="170"><defs><linearGradient id="cong" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/></radialGradient></defs><g class="rotating"><ellipse cx="100" cy="160" rx="70" ry="22" fill="#fcd34d" stroke="#b45309" stroke-width="4"/><path d="M30,160 L100,30 L170,160" fill="url(#cong)" stroke="#b45309" stroke-width="4"/></g></svg>',
+        calcInputs: [
+          {name: 'radius', label: 'Radius (r)', unit: 'units'},
+          {name: 'height', label: 'Height (h)', unit: 'units'},
+          {name: 'slant', label: 'Slant Height (l)', unit: 'units'}
+        ],
+        calcVolume: (vals) => (1/3) * Math.PI * Math.pow(vals.radius, 2) * vals.height,
+        calcSA: (vals) => Math.PI * Math.pow(vals.radius, 2) + Math.PI * vals.radius * vals.slant
       },
       {
         id: 'pyramid',
@@ -585,7 +949,15 @@
         edges: 8,
         volumeFormula: 'V = (1/3)s²h',
         surfaceAreaFormula: 'SA = s² + 2sl',
-        svg: '<svg viewBox="0 0 200 200" width="160" height="160"><defs><linearGradient id="pyrGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c084fc"/><stop offset="100%" stop-color="#9333ea"/></linearGradient></defs><g class="rotating"><path d="M100,35 L35,155 L165,155 Z" fill="url(#pyrGrad)" stroke="#6b21a8" stroke-width="3"/><path d="M100,35 L165,155 L140,165 Z" fill="#a855f7" stroke="#6b21a8" stroke-width="3"/><path d="M35,155 L165,155 L140,165 L60,165 Z" fill="#d8b4fe" stroke="#6b21a8" stroke-width="3"/></g></svg>'
+        keyFact: 'Square base with 4 triangular faces meeting at apex vertex.',
+        svg: '<svg viewBox="0 0 200 200" width="170" height="170"><defs><linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c084fc"/><stop offset="100%" stop-color="#9333ea"/></linearGradient></defs><g class="rotating"><path d="M100,30 L30,160 L170,160 Z" fill="url(#pg)" stroke="#6b21a8" stroke-width="4"/><path d="M100,30 L170,160 L145,172 Z" fill="#a855f7" stroke="#6b21a8" stroke-width="4"/><path d="M30,160 L170,160 L145,172 L55,172 Z" fill="#d8b4fe" stroke="#6b21a8" stroke-width="4"/></g></svg>',
+        calcInputs: [
+          {name: 'base', label: 'Base Side (s)', unit: 'units'},
+          {name: 'height', label: 'Height (h)', unit: 'units'},
+          {name: 'slant', label: 'Slant Height (l)', unit: 'units'}
+        ],
+        calcVolume: (vals) => (1/3) * Math.pow(vals.base, 2) * vals.height,
+        calcSA: (vals) => Math.pow(vals.base, 2) + 2 * vals.base * vals.slant
       },
       {
         id: 'prism',
@@ -595,77 +967,191 @@
         edges: 9,
         volumeFormula: 'V = (1/2)bhl',
         surfaceAreaFormula: 'SA = bh + 2ls + lb',
-        svg: '<svg viewBox="0 0 200 200" width="160" height="160"><defs><linearGradient id="prismGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#f472b6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs><g class="rotating"><path d="M50,140 L100,60 L150,140 Z" fill="#fbcfe8" stroke="#9f1239" stroke-width="3"/><path d="M50,140 L100,60 L100,150 Z" fill="url(#prismGrad)" stroke="#9f1239" stroke-width="3"/><path d="M100,60 L150,140 L100,150 Z" fill="#f472b6" stroke="#9f1239" stroke-width="3"/><path d="M50,140 L100,150 L150,140 Z" fill="#fda4af" stroke="#9f1239" stroke-width="3"/></g></svg>'
+        keyFact: 'Two triangular bases connected by 3 rectangular faces.',
+        svg: '<svg viewBox="0 0 200 200" width="170" height="170"><defs><linearGradient id="prg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#f472b6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs><g class="rotating"><path d="M45,145 L100,55 L155,145 Z" fill="#fbcfe8" stroke="#9f1239" stroke-width="4"/><path d="M45,145 L100,55 L100,155 Z" fill="url(#prg)" stroke="#9f1239" stroke-width="4"/><path d="M100,55 L155,145 L100,155 Z" fill="#f472b6" stroke="#9f1239" stroke-width="4"/><path d="M45,145 L100,155 L155,145 Z" fill="#fda4af" stroke="#9f1239" stroke-width="4"/></g></svg>',
+        calcInputs: [
+          {name: 'base', label: 'Triangle Base (b)', unit: 'units'},
+          {name: 'height', label: 'Triangle Height (h)', unit: 'units'},
+          {name: 'length', label: 'Prism Length (l)', unit: 'units'}
+        ],
+        calcVolume: (vals) => 0.5 * vals.base * vals.height * vals.length,
+        calcSA: (vals) => {
+          const s = Math.sqrt(Math.pow(vals.base/2, 2) + Math.pow(vals.height, 2)) * 2;
+          return vals.base * vals.height + 2 * vals.length * s + vals.length * vals.base;
+        }
+      },
+      {
+        id: 'hemisphere',
+        configKey: 'hemisphere_label',
+        faces: 2,
+        vertices: 0,
+        edges: 1,
+        volumeFormula: 'V = (2/3)πr³',
+        surfaceAreaFormula: 'SA = 3πr²',
+        keyFact: 'Exactly half a sphere. Surface includes curved area + circular base.',
+        svg: '<svg viewBox="0 0 200 200" width="170" height="170"><defs><radialGradient id="hg"><stop offset="20%" stop-color="#818cf8"/><stop offset="100%" stop-color="#4f46e5"/></radialGradient></defs><g class="rotating"><path d="M30,120 Q100,40 170,120" fill="url(#hg)" stroke="#3730a3" stroke-width="4"/><ellipse cx="100" cy="120" rx="70" ry="20" fill="#6366f1" stroke="#3730a3" stroke-width="4"/></g></svg>',
+        calcInputs: [{name: 'radius', label: 'Radius (r)', unit: 'units'}],
+        calcVolume: (vals) => (2/3) * Math.PI * Math.pow(vals.radius, 3),
+        calcSA: (vals) => 3 * Math.PI * Math.pow(vals.radius, 2)
+      },
+      {
+        id: 'rectangular',
+        configKey: 'rectangular_prism_label',
+        faces: 6,
+        vertices: 8,
+        edges: 12,
+        volumeFormula: 'V = lwh',
+        surfaceAreaFormula: 'SA = 2(lw + lh + wh)',
+        keyFact: 'All faces are rectangles. Opposite faces are congruent.',
+        svg: '<svg viewBox="0 0 200 200" width="170" height="170"><g class="rotating"><rect x="30" y="75" width="80" height="60" fill="#a78bfa" stroke="#5b21b6" stroke-width="4"/><path d="M110,75 L150,45 L150,105 L110,135 Z" fill="#8b5cf6" stroke="#5b21b6" stroke-width="4"/><path d="M30,75 L70,45 L150,45 L110,75 Z" fill="#c4b5fd" stroke="#5b21b6" stroke-width="4"/></g></svg>',
+        calcInputs: [
+          {name: 'length', label: 'Length (l)', unit: 'units'},
+          {name: 'width', label: 'Width (w)', unit: 'units'},
+          {name: 'height', label: 'Height (h)', unit: 'units'}
+        ],
+        calcVolume: (vals) => vals.length * vals.width * vals.height,
+        calcSA: (vals) => 2 * (vals.length * vals.width + vals.length * vals.height + vals.width * vals.height)
       }
     ];
 
     const quizQuestions = [
       {
-        question: "A cube has a side length of 5 cm. What is its volume?",
-        options: ["25 cm³", "75 cm³", "125 cm³", "150 cm³"],
-        correct: 2,
-        explanation: "Volume of cube = s³ = 5³ = 125 cm³"
-      },
-      {
-        question: "What is the surface area formula for a sphere with radius r?",
-        options: ["2πr²", "4πr²", "πr²", "(4/3)πr³"],
+        question: "A cube has a total surface area of 294 cm². What is the length of one edge?",
+        options: ["6 cm", "7 cm", "8 cm", "9 cm"],
         correct: 1,
-        explanation: "Surface area of sphere = 4πr²"
+        difficulty: "medium",
+        explanation: "SA = 6s², so 294 = 6s². Therefore s² = 49, and s = 7 cm.",
+        context: "Use the surface area formula and work backwards"
       },
       {
-        question: "A cylinder has radius 3 cm and height 10 cm. What is its volume? (Use π ≈ 3.14)",
-        options: ["94.2 cm³", "188.4 cm³", "282.6 cm³", "376.8 cm³"],
-        correct: 2,
-        explanation: "Volume = πr²h = 3.14 × 3² × 10 = 3.14 × 9 × 10 = 282.6 cm³"
-      },
-      {
-        question: "Which 3D shape has exactly one vertex?",
-        options: ["Cylinder", "Cone", "Pyramid", "Prism"],
+        question: "A sphere and a cylinder have the same radius of 5 cm. If they also have the same volume, what is the height of the cylinder?",
+        options: ["5 cm", "6.67 cm", "10 cm", "15 cm"],
         correct: 1,
-        explanation: "A cone has exactly one vertex at its apex"
+        difficulty: "hard",
+        explanation: "Sphere volume: (4/3)π(5³) = 523.6 cm³. Cylinder: πr²h = π(25)h. Solving: h = 523.6/(25π) ≈ 6.67 cm.",
+        context: "This tests understanding of volume relationships"
       },
       {
-        question: "A cube has surface area of 150 cm². What is the length of one side?",
-        options: ["5 cm", "6 cm", "25 cm", "15 cm"],
-        correct: 0,
-        explanation: "SA = 6s², so 150 = 6s², s² = 25, s = 5 cm"
-      },
-      {
-        question: "What is the relationship between the volume of a cone and a cylinder with the same base and height?",
-        options: ["Cone volume is half", "Cone volume is one-third", "They are equal", "Cone volume is two-thirds"],
+        question: "What is the volume of a cone with radius 6 cm and height 9 cm? (Use π ≈ 3.14)",
+        options: ["226.08 cm³", "339.12 cm³", "452.16 cm³", "678.24 cm³"],
         correct: 1,
-        explanation: "Volume of cone is exactly 1/3 of cylinder volume with same dimensions"
+        difficulty: "easy",
+        explanation: "V = (1/3)πr²h = (1/3) × 3.14 × 36 × 9 = 339.12 cm³.",
+        context: "Apply the cone volume formula"
       },
       {
-        question: "A sphere has a radius of 6 cm. What is its volume? (Use π ≈ 3.14)",
-        options: ["452.16 cm³", "678.24 cm³", "904.32 cm³", "1017.36 cm³"],
-        correct: 2,
-        explanation: "V = (4/3)πr³ = (4/3) × 3.14 × 6³ = (4/3) × 3.14 × 216 = 904.32 cm³"
-      },
-      {
-        question: "How many edges does a triangular prism have?",
-        options: ["6", "7", "8", "9"],
+        question: "If the radius of a sphere is doubled, by what factor does its volume increase?",
+        options: ["2 times", "4 times", "6 times", "8 times"],
         correct: 3,
-        explanation: "A triangular prism has 9 edges: 3 on each triangular face (6 total) plus 3 connecting edges"
+        difficulty: "medium",
+        explanation: "V = (4/3)πr³. If r becomes 2r, then V becomes (4/3)π(2r)³ = 8 × (4/3)πr³. Volume increases 8 times.",
+        context: "Understanding cubic relationships"
       },
       {
-        question: "A square pyramid has a base side of 8 cm and height of 12 cm. What is its volume?",
-        options: ["128 cm³", "192 cm³", "256 cm³", "384 cm³"],
-        correct: 2,
-        explanation: "V = (1/3)s²h = (1/3) × 8² × 12 = (1/3) × 64 × 12 = 256 cm³"
+        question: "A rectangular prism has dimensions 4 cm × 5 cm × 10 cm. What is its surface area?",
+        options: ["160 cm²", "180 cm²", "200 cm²", "220 cm²"],
+        correct: 3,
+        difficulty: "easy",
+        explanation: "SA = 2(lw + lh + wh) = 2(20 + 40 + 50) = 2(110) = 220 cm².",
+        context: "Calculate total surface area"
       },
       {
-        question: "Which shape has the same number of faces, vertices, and edges?",
-        options: ["Cube", "Sphere", "None of them", "Triangular Prism"],
+        question: "How many times greater is the volume of a cylinder compared to a cone with the same base and height?",
+        options: ["2 times", "3 times", "4 times", "6 times"],
+        correct: 1,
+        difficulty: "easy",
+        explanation: "Cylinder V = πr²h. Cone V = (1/3)πr²h. The cylinder volume is exactly 3 times the cone volume.",
+        context: "Fundamental volume relationship"
+      },
+      {
+        question: "A hemisphere has a radius of 9 cm. What is its total surface area including the base? (Use π ≈ 3.14)",
+        options: ["508.68 cm²", "635.85 cm²", "763.02 cm²", "890.19 cm²"],
         correct: 2,
-        explanation: "No common 3D shape has equal numbers of faces, vertices, and edges"
+        difficulty: "medium",
+        explanation: "SA = 3πr² = 3 × 3.14 × 81 = 763.02 cm².",
+        context: "Remember to include the circular base"
+      },
+      {
+        question: "A square pyramid has a base edge of 12 cm and a slant height of 10 cm. What is its surface area?",
+        options: ["240 cm²", "288 cm²", "324 cm²", "384 cm²"],
+        correct: 3,
+        difficulty: "medium",
+        explanation: "SA = s² + 2sl = 144 + 2(12)(10) = 144 + 240 = 384 cm².",
+        context: "Base area plus four triangular faces"
+      },
+      {
+        question: "If a cube's edge length is tripled, how many times greater does its volume become?",
+        options: ["3 times", "9 times", "18 times", "27 times"],
+        correct: 3,
+        difficulty: "medium",
+        explanation: "V = s³. If s becomes 3s, then V becomes (3s)³ = 27s³. Volume increases 27 times.",
+        context: "Scaling in three dimensions"
+      },
+      {
+        question: "A cylindrical tank has radius 7 cm and height 20 cm. How much water can it hold? (Use π ≈ 3.14)",
+        options: ["2,461.76 cm³", "3,077.2 cm³", "3,692.64 cm³", "4,308.08 cm³"],
+        correct: 1,
+        difficulty: "easy",
+        explanation: "V = πr²h = 3.14 × 49 × 20 = 3,077.2 cm³.",
+        context: "Practical application of cylinder volume"
+      },
+      {
+        question: "Which shape has the greatest volume-to-surface-area ratio?",
+        options: ["Cube", "Sphere", "Cylinder", "Cone"],
+        correct: 1,
+        difficulty: "hard",
+        explanation: "A sphere has the maximum volume for a given surface area compared to all other shapes - this is why bubbles are spherical.",
+        context: "Advanced geometric principle"
+      },
+      {
+        question: "A cone has volume 150 cm³ and radius 5 cm. What is its height? (Use π ≈ 3.14)",
+        options: ["4.78 cm", "5.73 cm", "6.89 cm", "7.96 cm"],
+        correct: 1,
+        difficulty: "hard",
+        explanation: "V = (1/3)πr²h. So 150 = (1/3)(3.14)(25)h. Solving: h = 450/(78.5) ≈ 5.73 cm.",
+        context: "Work backwards from volume"
+      },
+      {
+        question: "A triangular prism has a triangular base with base 8 cm and height 6 cm. If the prism length is 15 cm, what is its volume?",
+        options: ["180 cm³", "240 cm³", "360 cm³", "720 cm³"],
+        correct: 2,
+        difficulty: "medium",
+        explanation: "V = (1/2)bhl = (1/2) × 8 × 6 × 15 = 360 cm³.",
+        context: "Triangular prism volume calculation"
+      },
+      {
+        question: "If the height of a cylinder is doubled while the radius stays the same, what happens to its volume?",
+        options: ["Stays the same", "Doubles", "Triples", "Quadruples"],
+        correct: 1,
+        difficulty: "easy",
+        explanation: "V = πr²h. If h doubles to 2h, then V becomes πr²(2h) = 2πr²h. Volume doubles.",
+        context: "Linear relationship with height"
+      },
+      {
+        question: "A cube and a sphere have the same volume. If the cube has edge length 10 cm, what is the approximate radius of the sphere?",
+        options: ["5.42 cm", "6.20 cm", "7.81 cm", "8.95 cm"],
+        correct: 1,
+        difficulty: "hard",
+        explanation: "Cube V = 1000 cm³. Sphere: (4/3)πr³ = 1000. Solving: r³ = 750/π ≈ 238.73, so r ≈ 6.20 cm.",
+        context: "Comparing volumes across shapes"
       }
     ];
 
+    let currentTab = 'shapes';
     let currentQuestion = 0;
     let score = 0;
+    let quizStarted = false;
     let answered = false;
-    let answeredQuestions = new Array(quizQuestions.length).fill(false);
+    let selectedAnswer = null;
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      event.target.classList.add('active');
+      document.getElementById(`${tab}-tab`).classList.add('active');
+    }
 
     function renderShapes() {
       const grid = document.getElementById('shapes-grid');
@@ -680,29 +1166,34 @@
         card.innerHTML = `
           <div class="shape-visual">${shape.svg}</div>
           <div class="shape-name">${shapeName}</div>
-          <div class="shape-info">
-            <h4>Properties</h4>
-            <div class="info-grid">
-              <div class="info-item">
-                <span class="info-label">Faces:</span>
-                <span class="info-value">${shape.faces}</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Vertices:</span>
-                <span class="info-value">${shape.vertices}</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Edges:</span>
-                <span class="info-value">${shape.edges}</span>
-              </div>
+          
+          <div class="properties-grid">
+            <div class="property-box">
+              <div class="property-label">Faces</div>
+              <div class="property-value">${shape.faces}</div>
+            </div>
+            <div class="property-box">
+              <div class="property-label">Vertices</div>
+              <div class="property-value">${shape.vertices}</div>
+            </div>
+            <div class="property-box">
+              <div class="property-label">Edges</div>
+              <div class="property-value">${shape.edges}</div>
             </div>
           </div>
-          <div class="formula-section">
-            <div class="shape-info">
-              <h4>Formulas</h4>
-              <div class="formula"><strong>Volume:</strong> ${shape.volumeFormula}</div>
-              <div class="formula"><strong>Surface Area:</strong> ${shape.surfaceAreaFormula}</div>
+          
+          <div class="formulas-section">
+            <div class="formula-title">📐 Formulas</div>
+            <div class="formula-item">
+              <span class="formula-label">Volume:</span> ${shape.volumeFormula}
             </div>
+            <div class="formula-item">
+              <span class="formula-label">Surface Area:</span> ${shape.surfaceAreaFormula}
+            </div>
+          </div>
+          
+          <div class="key-fact">
+            💡 <strong>Key Fact:</strong> ${shape.keyFact}
           </div>
         `;
         
@@ -710,90 +1201,177 @@
       });
     }
 
-    function renderProgressDots() {
-      const progressContainer = document.getElementById('quiz-progress');
-      progressContainer.innerHTML = '';
-      
-      quizQuestions.forEach((_, index) => {
-        const dot = document.createElement('div');
-        dot.className = 'progress-dot';
-        if (answeredQuestions[index]) {
-          dot.classList.add('completed');
+    function setupCalculator() {
+      const shapeSelect = document.getElementById('calc-shape');
+      shapeSelect.addEventListener('change', (e) => {
+        const shapeId = e.target.value;
+        const shape = shapes.find(s => s.id === shapeId);
+        const inputsContainer = document.getElementById('calc-inputs');
+        
+        if (!shape) {
+          inputsContainer.innerHTML = '';
+          return;
         }
-        if (index === currentQuestion) {
-          dot.classList.add('current');
-        }
-        progressContainer.appendChild(dot);
+        
+        inputsContainer.innerHTML = shape.calcInputs.map(input => `
+          <div class="form-group">
+            <label class="form-label">${input.label}</label>
+            <input type="number" class="form-input" id="calc-${input.name}" placeholder="Enter ${input.unit}" step="0.01" min="0">
+          </div>
+        `).join('');
       });
+      
+      document.getElementById('calculate-btn').addEventListener('click', calculateResults);
+    }
+
+    function calculateResults() {
+      const shapeId = document.getElementById('calc-shape').value;
+      const shape = shapes.find(s => s.id === shapeId);
+      const resultDiv = document.getElementById('calc-result');
+      
+      if (!shape) {
+        resultDiv.textContent = 'Please select a shape first';
+        return;
+      }
+      
+      const values = {};
+      let allValid = true;
+      
+      shape.calcInputs.forEach(input => {
+        const val = parseFloat(document.getElementById(`calc-${input.name}`).value);
+        if (isNaN(val) || val <= 0) {
+          allValid = false;
+        }
+        values[input.name] = val;
+      });
+      
+      if (!allValid) {
+        resultDiv.textContent = 'Please enter valid positive numbers for all dimensions';
+        return;
+      }
+      
+      const volume = shape.calcVolume(values);
+      const surfaceArea = shape.calcSA(values);
+      
+      resultDiv.innerHTML = `
+        <div style="text-align: center;">
+          <div style="font-size: 18px; color: #64748b; margin-bottom: 15px;">Results for ${window.elementSdk.config[shape.configKey] || defaultConfig[shape.configKey]}</div>
+          <div style="font-size: 24px; font-weight: 800; color: #667eea; margin: 10px 0;">
+            Volume: ${volume.toFixed(2)} cubic units
+          </div>
+          <div style="font-size: 24px; font-weight: 800; color: #10b981; margin: 10px 0;">
+            Surface Area: ${surfaceArea.toFixed(2)} square units
+          </div>
+        </div>
+      `;
+    }
+
+    function startQuiz() {
+      quizStarted = true;
+      currentQuestion = 0;
+      score = 0;
+      answered = false;
+      selectedAnswer = null;
+      
+      document.getElementById('quiz-start').style.display = 'none';
+      document.getElementById('quiz-content').style.display = 'block';
+      
+      renderQuestion();
     }
 
     function renderQuestion() {
       const question = quizQuestions[currentQuestion];
       
-      document.getElementById('question-number').textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
+      document.getElementById('question-counter').textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
+      document.getElementById('score-display').textContent = `Score: ${score}/${quizQuestions.length}`;
+      
+      const difficultyBadge = document.getElementById('difficulty-badge');
+      difficultyBadge.textContent = question.difficulty;
+      difficultyBadge.className = `difficulty-badge difficulty-${question.difficulty}`;
+      
+      const progress = ((currentQuestion) / quizQuestions.length) * 100;
+      document.getElementById('progress-fill').style.width = `${progress}%`;
+      
       document.getElementById('question-text').textContent = question.question;
+      document.getElementById('question-context').textContent = question.context;
       
-      const optionsContainer = document.getElementById('options-container');
-      optionsContainer.innerHTML = '';
+      const optionsGrid = document.getElementById('options-grid');
+      optionsGrid.innerHTML = '';
       
+      const letters = ['A', 'B', 'C', 'D'];
       question.options.forEach((option, index) => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.textContent = option;
-        btn.onclick = () => selectAnswer(index);
-        optionsContainer.appendChild(btn);
+        const optionCard = document.createElement('div');
+        optionCard.className = 'option-card';
+        optionCard.innerHTML = `
+          <div class="option-letter">${letters[index]}</div>
+          <div>${option}</div>
+        `;
+        optionCard.onclick = () => selectOption(index);
+        optionsGrid.appendChild(optionCard);
       });
       
-      const feedback = document.getElementById('feedback');
-      feedback.textContent = '';
-      feedback.className = 'feedback-container empty';
+      document.getElementById('feedback-box').textContent = '';
+      document.getElementById('feedback-box').className = 'feedback-box empty';
+      document.getElementById('submit-btn').style.display = 'inline-block';
+      document.getElementById('next-btn').style.display = 'none';
+      document.getElementById('submit-btn').disabled = true;
       
       answered = false;
-      updateNextButton();
-      renderProgressDots();
+      selectedAnswer = null;
     }
 
-    function selectAnswer(index) {
+    function selectOption(index) {
       if (answered) return;
       
+      selectedAnswer = index;
+      
+      document.querySelectorAll('.option-card').forEach((card, i) => {
+        card.classList.remove('selected');
+        if (i === index) {
+          card.style.borderColor = '#667eea';
+          card.style.background = '#f1f5f9';
+        } else {
+          card.style.borderColor = '#e2e8f0';
+          card.style.background = 'white';
+        }
+      });
+      
+      document.getElementById('submit-btn').disabled = false;
+    }
+
+    function submitAnswer() {
+      if (answered || selectedAnswer === null) return;
+      
       answered = true;
-      answeredQuestions[currentQuestion] = true;
       const question = quizQuestions[currentQuestion];
-      const options = document.querySelectorAll('.option-btn');
-      const feedback = document.getElementById('feedback');
+      const options = document.querySelectorAll('.option-card');
+      const feedback = document.getElementById('feedback-box');
       
-      options.forEach(opt => opt.disabled = true);
+      options.forEach(opt => {
+        opt.classList.add('disabled');
+        opt.onclick = null;
+      });
       
-      if (index === question.correct) {
-        options[index].classList.add('correct');
-        feedback.textContent = `✓ Correct! ${question.explanation}`;
-        feedback.className = 'feedback-container correct';
+      if (selectedAnswer === question.correct) {
+        options[selectedAnswer].classList.add('correct');
+        feedback.innerHTML = `<div>✅ <strong>Excellent!</strong> ${question.explanation}</div>`;
+        feedback.className = 'feedback-box correct';
         score++;
       } else {
-        options[index].classList.add('incorrect');
+        options[selectedAnswer].classList.add('incorrect');
         options[question.correct].classList.add('correct');
-        feedback.textContent = `✗ Incorrect. ${question.explanation}`;
-        feedback.className = 'feedback-container incorrect';
+        feedback.innerHTML = `<div>❌ <strong>Not quite.</strong> ${question.explanation}</div>`;
+        feedback.className = 'feedback-box incorrect';
       }
       
-      updateScore();
-      updateNextButton();
-      renderProgressDots();
-    }
-
-    function updateScore() {
-      document.getElementById('score-badge').textContent = `Score: ${score}/${quizQuestions.length}`;
-    }
-
-    function updateNextButton() {
-      const nextBtn = document.getElementById('next-btn');
-      const config = window.elementSdk.config;
-      nextBtn.textContent = config.quiz_button || defaultConfig.quiz_button;
-      nextBtn.disabled = !answered;
+      document.getElementById('submit-btn').style.display = 'none';
+      document.getElementById('next-btn').style.display = 'inline-block';
+      document.getElementById('score-display').textContent = `Score: ${score}/${quizQuestions.length}`;
     }
 
     function nextQuestion() {
       currentQuestion++;
+      
       if (currentQuestion >= quizQuestions.length) {
         showResults();
       } else {
@@ -802,75 +1380,80 @@
     }
 
     function showResults() {
-      const quizContent = document.getElementById('quiz-content');
-      const finalResults = document.getElementById('final-results');
-      const nextBtn = document.getElementById('next-btn');
-      const restartBtn = document.getElementById('restart-btn');
-      
-      quizContent.style.display = 'none';
-      nextBtn.style.display = 'none';
-      restartBtn.style.display = 'inline-block';
-      finalResults.style.display = 'block';
+      document.getElementById('quiz-content').style.display = 'none';
       
       const percentage = Math.round((score / quizQuestions.length) * 100);
-      let message = '';
       let emoji = '';
+      let message = '';
+      let performance = '';
       
-      if (percentage >= 90) {
-        message = 'Outstanding! You\'ve mastered 3D shapes!';
+      if (percentage >= 95) {
         emoji = '🏆';
-      } else if (percentage >= 70) {
-        message = 'Great job! You have a solid understanding!';
+        message = 'Perfect Mastery!';
+        performance = 'You have exceptional understanding of 3D geometry!';
+      } else if (percentage >= 85) {
+        emoji = '🌟';
+        message = 'Outstanding Performance!';
+        performance = 'You have mastered Grade 10 3D shapes concepts!';
+      } else if (percentage >= 75) {
         emoji = '⭐';
-      } else if (percentage >= 50) {
-        message = 'Good effort! Review the formulas and try again!';
+        message = 'Great Job!';
+        performance = 'You have strong understanding with room to excel!';
+      } else if (percentage >= 60) {
         emoji = '📚';
+        message = 'Good Effort!';
+        performance = 'Review the study guide and practice more problems.';
       } else {
-        message = 'Keep practicing! Study the shapes guide above.';
         emoji = '💪';
+        message = 'Keep Learning!';
+        performance = 'Study the formulas and try the calculator tool for practice.';
       }
       
-      finalResults.innerHTML = `
-        <div class="final-results">
-          <div style="font-size: 80px; margin-bottom: 20px;">${emoji}</div>
-          <div class="final-score">${percentage}%</div>
-          <div class="performance-message">${message}</div>
-          <div class="results-breakdown">
-            <div class="result-stat">
-              <div class="result-stat-value">${score}</div>
-              <div class="result-stat-label">Correct</div>
+      const resultsDiv = document.getElementById('quiz-results');
+      resultsDiv.style.display = 'block';
+      resultsDiv.innerHTML = `
+        <div class="results-screen">
+          <div class="results-emoji">${emoji}</div>
+          <div class="results-score">${percentage}%</div>
+          <div class="results-message">${message}</div>
+          <p style="font-size: 20px; color: #64748b; margin: 20px 0; font-weight: 500;">${performance}</p>
+          
+          <div class="results-stats">
+            <div class="stat-box">
+              <div class="stat-value">${score}</div>
+              <div class="stat-label">Correct</div>
             </div>
-            <div class="result-stat">
-              <div class="result-stat-value">${quizQuestions.length - score}</div>
-              <div class="result-stat-label">Incorrect</div>
+            <div class="stat-box">
+              <div class="stat-value">${quizQuestions.length - score}</div>
+              <div class="stat-label">Incorrect</div>
             </div>
-            <div class="result-stat">
-              <div class="result-stat-value">${quizQuestions.length}</div>
-              <div class="result-stat-label">Total</div>
+            <div class="stat-box">
+              <div class="stat-value">${quizQuestions.length}</div>
+              <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value">${percentage}%</div>
+              <div class="stat-label">Score</div>
             </div>
           </div>
+          
+          <button class="quiz-btn secondary" onclick="restartQuiz()" id="restart-quiz-btn">
+            ${window.elementSdk.config.restart_button || defaultConfig.restart_button}
+          </button>
         </div>
       `;
     }
 
     function restartQuiz() {
+      quizStarted = false;
       currentQuestion = 0;
       score = 0;
       answered = false;
-      answeredQuestions.fill(false);
+      selectedAnswer = null;
       
-      const quizContent = document.getElementById('quiz-content');
-      const finalResults = document.getElementById('final-results');
-      const nextBtn = document.getElementById('next-btn');
-      const restartBtn = document.getElementById('restart-btn');
-      
-      quizContent.style.display = 'block';
-      nextBtn.style.display = 'inline-block';
-      restartBtn.style.display = 'none';
-      finalResults.style.display = 'none';
-      
-      renderQuestion();
-      updateScore();
+      document.getElementById('quiz-start').style.display = 'block';
+      document.getElementById('quiz-content').style.display = 'none';
+      document.getElementById('quiz-results').style.display = 'none';
     }
 
     async function onConfigChange(config) {
@@ -879,51 +1462,62 @@
       const baseFontStack = '-apple-system, BlinkMacSystemFont, sans-serif';
       
       document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
-      document.body.style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color} 0%, #2a5298 50%, ${config.accent_color || defaultConfig.accent_color} 100%)`;
+      document.body.style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color} 0%, #1e293b 25%, #334155 50%, ${config.accent_color || defaultConfig.accent_color} 100%)`;
       
       document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
-      document.getElementById('app-title').style.fontSize = `${baseSize * 3.5}px`;
-      document.getElementById('app-title').style.color = config.surface_color || defaultConfig.surface_color;
+      document.getElementById('app-title').style.fontSize = `${baseSize * 4}px`;
       
       document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
-      document.getElementById('subtitle').style.fontSize = `${baseSize * 1.375}px`;
-      document.getElementById('subtitle').style.color = config.surface_color || defaultConfig.surface_color;
+      document.getElementById('subtitle').style.fontSize = `${baseSize * 1.5}px`;
+      
+      document.getElementById('calculator-title').textContent = config.calculator_title || defaultConfig.calculator_title;
+      document.getElementById('calculator-title').style.fontSize = `${baseSize * 2.625}px`;
+      document.getElementById('calculator-title').style.color = config.text_color || defaultConfig.text_color;
+      
+      document.getElementById('calculate-btn').textContent = config.calculate_button || defaultConfig.calculate_button;
+      document.getElementById('calculate-btn').style.fontSize = `${baseSize * 1.25}px`;
       
       document.getElementById('quiz-title').textContent = config.quiz_title || defaultConfig.quiz_title;
-      document.getElementById('quiz-title').style.fontSize = `${baseSize * 2.375}px`;
+      document.getElementById('quiz-title').style.fontSize = `${baseSize * 3}px`;
       document.getElementById('quiz-title').style.color = config.text_color || defaultConfig.text_color;
       
-      const nextBtn = document.getElementById('next-btn');
-      nextBtn.style.fontSize = `${baseSize * 1.125}px`;
-      nextBtn.style.background = `linear-gradient(135deg, ${config.accent_color || defaultConfig.accent_color}, ${config.button_color || defaultConfig.button_color})`;
+      document.getElementById('start-quiz-btn').textContent = config.start_quiz_button || defaultConfig.start_quiz_button;
+      document.getElementById('start-quiz-btn').style.fontSize = `${baseSize * 1.5}px`;
       
-      const restartBtn = document.getElementById('restart-btn');
-      restartBtn.textContent = config.restart_button || defaultConfig.restart_button;
-      restartBtn.style.fontSize = `${baseSize * 1.125}px`;
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.textContent = config.submit_button || defaultConfig.submit_button;
+      submitBtn.style.fontSize = `${baseSize * 1.25}px`;
+      
+      const nextBtn = document.getElementById('next-btn');
+      nextBtn.textContent = config.next_button || defaultConfig.next_button;
+      nextBtn.style.fontSize = `${baseSize * 1.25}px`;
       
       document.querySelectorAll('.shape-card').forEach(el => {
-        el.style.background = config.surface_color || defaultConfig.surface_color;
+        el.style.background = `rgba(${hexToRgb(config.surface_color || defaultConfig.surface_color)}, 0.95)`;
       });
       
       document.querySelectorAll('.shape-name').forEach(el => {
-        el.style.fontSize = `${baseSize * 1.75}px`;
+        el.style.fontSize = `${baseSize * 2}px`;
         el.style.color = config.text_color || defaultConfig.text_color;
       });
       
-      document.querySelectorAll('.formula strong').forEach(el => {
+      document.querySelectorAll('.property-value').forEach(el => {
         el.style.color = config.accent_color || defaultConfig.accent_color;
       });
       
-      document.querySelector('.quiz-container').style.background = config.surface_color || defaultConfig.surface_color;
-      
-      document.getElementById('question-text').style.fontSize = `${baseSize * 1.5}px`;
-      document.getElementById('question-text').style.color = config.text_color || defaultConfig.text_color;
-      
-      document.querySelectorAll('.option-btn').forEach(el => {
-        el.style.fontSize = `${baseSize * 1.125}px`;
+      document.querySelectorAll('.formula-label').forEach(el => {
+        el.style.color = config.accent_color || defaultConfig.accent_color;
       });
       
+      document.querySelector('.calculator-container').style.background = `rgba(${hexToRgb(config.surface_color || defaultConfig.surface_color)}, 0.95)`;
+      document.querySelector('.quiz-container').style.background = `rgba(${hexToRgb(config.surface_color || defaultConfig.surface_color)}, 0.95)`;
+      
       renderShapes();
+    }
+
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '255, 255, 255';
     }
 
     window.elementSdk.init({
@@ -992,18 +1586,24 @@
         ["cone_label", config.cone_label || defaultConfig.cone_label],
         ["pyramid_label", config.pyramid_label || defaultConfig.pyramid_label],
         ["prism_label", config.prism_label || defaultConfig.prism_label],
+        ["hemisphere_label", config.hemisphere_label || defaultConfig.hemisphere_label],
+        ["rectangular_prism_label", config.rectangular_prism_label || defaultConfig.rectangular_prism_label],
         ["quiz_title", config.quiz_title || defaultConfig.quiz_title],
-        ["quiz_button", config.quiz_button || defaultConfig.quiz_button],
-        ["restart_button", config.restart_button || defaultConfig.restart_button]
+        ["start_quiz_button", config.start_quiz_button || defaultConfig.start_quiz_button],
+        ["next_button", config.next_button || defaultConfig.next_button],
+        ["submit_button", config.submit_button || defaultConfig.submit_button],
+        ["restart_button", config.restart_button || defaultConfig.restart_button],
+        ["calculator_title", config.calculator_title || defaultConfig.calculator_title],
+        ["calculate_button", config.calculate_button || defaultConfig.calculate_button]
       ])
     });
 
+    document.getElementById('start-quiz-btn').addEventListener('click', startQuiz);
+    document.getElementById('submit-btn').addEventListener('click', submitAnswer);
     document.getElementById('next-btn').addEventListener('click', nextQuestion);
-    document.getElementById('restart-btn').addEventListener('click', restartQuiz);
 
     renderShapes();
-    renderQuestion();
-    updateScore();
+    setupCalculator();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a471c9ae340ce1f',t:'MTc2NDEzNjI2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a4e78bf63a7dc19',t:'MTc2NDIxMzQzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
